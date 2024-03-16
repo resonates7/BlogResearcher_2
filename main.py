@@ -16,18 +16,19 @@ OpenAIGPT4 = ChatOpenAI(
     model="gpt-4"
 )
 
+query = 'Muslim'
 
 # Instantiate the agents
-editor = agents.editor_agent()
-news_fetcher = agents.news_fetcher_agent()
-news_analyzer = agents.news_analyzer_agent()
+editor = agents.editor_agent(query)
+news_fetcher = agents.news_fetcher_agent(query)
+news_analyzer = agents.news_analyzer_agent(query)
 newsletter_compiler = agents.newsletter_compiler_agent()
 
 # Instantiate the tasks
-fetch_news_task = tasks.fetch_news_task(news_fetcher)
-analyze_news_task = tasks.analyze_news_task(news_analyzer, [fetch_news_task])
+fetch_news_task = tasks.fetch_news_task(news_fetcher, query)
+analyze_news_task = tasks.analyze_news_task(news_analyzer, [fetch_news_task], query)
 compile_newsletter_task = tasks.compile_newsletter_task(
-    newsletter_compiler, [analyze_news_task], save_markdown)
+    newsletter_compiler, [analyze_news_task], save_markdown, query)
 
 # Form the crew
 crew = Crew(
@@ -46,4 +47,3 @@ print("Crew Work Results:")
 print(results)
 
 
-#test
