@@ -13,22 +13,24 @@ tasks = AINewsLetterTasks()
 
 # Initialize the OpenAI GPT-4 language model
 OpenAIGPT4 = ChatOpenAI(
-    model="gpt-4"
+    model= "gpt-3.5-turbo" ## "gpt-4"
 )
 
-query = 'Muslim'
+query = 'Should I invest in residential real estate in Savannah Georgia?'
+kw = ['job trends', 'population trends', 'quality of life trends', 'things to do trends']
+keywords = f', focusing on {kw}'
 
 # Instantiate the agents
-editor = agents.editor_agent(query)
-news_fetcher = agents.news_fetcher_agent(query)
-news_analyzer = agents.news_analyzer_agent(query)
+editor = agents.editor_agent(query, keywords)
+news_fetcher = agents.news_fetcher_agent(query, keywords)
+news_analyzer = agents.news_analyzer_agent(query, keywords)
 newsletter_compiler = agents.newsletter_compiler_agent()
 
 # Instantiate the tasks
-fetch_news_task = tasks.fetch_news_task(news_fetcher, query)
-analyze_news_task = tasks.analyze_news_task(news_analyzer, [fetch_news_task], query)
+fetch_news_task = tasks.fetch_news_task(news_fetcher, query, keywords)
+analyze_news_task = tasks.analyze_news_task(news_analyzer, [fetch_news_task], query, keywords)
 compile_newsletter_task = tasks.compile_newsletter_task(
-    newsletter_compiler, [analyze_news_task], save_markdown, query)
+    newsletter_compiler, [analyze_news_task], save_markdown)
 
 # Form the crew
 crew = Crew(
